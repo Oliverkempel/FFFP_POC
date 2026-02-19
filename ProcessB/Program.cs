@@ -9,17 +9,20 @@ public class Program
         Console.WriteLine("Process B - I want products!");
 
         Domain domain = new Domain();
-
-        Console.WriteLine("Press any key to request products!");
-        Console.ReadKey();
-
-        List<Product> response = await domain.GetAllProducts();
-
-        // Print the response!
-        foreach(Product product in response)
+        while (true)
         {
-            Console.WriteLine(product.ToString());
+            Console.WriteLine("Press any key to request products!");
+            Console.ReadKey();
+
+            List<Product> response = await domain.GetAllProducts();
+
+            // Print the response!
+            foreach (Product product in response)
+            {
+                Console.WriteLine(product.ToString());
+            }
         }
+
     }
 
 }

@@ -57,6 +57,8 @@
                 using (StreamWriter sw = new StreamWriter(fullFilePath, false))
                 {
                     sw.WriteLine(jsonStr);
+
+                    sw.Close();
                 }
 
                 Console.WriteLine("The request has been sent!");
@@ -70,7 +72,7 @@
 
             Console.WriteLine("Now awaiting response...");
 
-            // First we check if the file has already arrived!
+            // First we should check if the file has already arrived!
             // ...
 
             // Use a semaphore to await for the file to show up in the folder
@@ -82,11 +84,26 @@
                 {
                     Console.WriteLine($"The responsefile was found! {e.Name}");
 
-                    // Safely Read the file
-                    using(StreamReader sr = new StreamReader(e.FullPath))
+                    bool hasReadFile = false;
+                    while (!hasReadFile)
                     {
-                        responseStr = sr.ReadToEnd();
+                        try
+                        {
+                            // Safely Read the file
+                            using (StreamReader sr = new StreamReader(e.FullPath))
+                            {
+                                responseStr = sr.ReadToEnd();
+                            }
+                            hasReadFile = true;
+                        }
+                        catch (IOException ex)
+                        {
+                            Thread.Sleep(20);
+                        }
                     }
+
+
+
                     // The file is found and we can therefore release the semaphore
                     semaphore.Release();
                 };

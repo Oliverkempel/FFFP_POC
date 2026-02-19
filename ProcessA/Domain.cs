@@ -6,6 +6,7 @@
     using System.Collections.Generic;
     using System.Text;
     using System.Text.Json;
+    using System.Threading.Tasks;
 
     public class Domain
     {
@@ -32,19 +33,34 @@
             
         }
 
-        private void Watcher_FileCreatedInDir(object sender, FileSystemEventArgs e)
+        private async void Watcher_FileCreatedInDir(object sender, FileSystemEventArgs e)
         {
             Console.WriteLine($"New file in requests folder registered!: {e.Name}");
             
             try
             {
                 string requestStr = "";
-                // Read and deserialize the request.
-                using (StreamReader sr = new StreamReader(e.FullPath))
-                {
-                    requestStr = sr.ReadToEnd();
-                }
 
+                // Read and deserialize the request, and perform retries if the file is still locked by the other process
+                
+                bool hasReadFile = false;
+                
+                while (!hasReadFile)
+                {
+                    try
+                    {
+                        using (StreamReader sr = new StreamReader(e.FullPath))
+                        {
+                            requestStr = sr.ReadToEnd();
+                        }
+                        hasReadFile = true;
+                    }
+                    catch (IOException ex)
+                    {
+                        Thread.Sleep(20);
+                    }
+                }
+                
                 // Deserialize the request
                 Request requestObj = JsonSerializer.Deserialize<Request>(requestStr);
 
@@ -70,6 +86,7 @@
 
         public void ExportProducts(string filename)
         {
+            Console.WriteLine("Waiting 5 seconds, then sending the data");
             // Dummy 5 second delay to "fake" a whole bunch of data
             Thread.Sleep(5000);
 
@@ -115,6 +132,11 @@
 
             // Allow the watcher to raise events
             watcher.EnableRaisingEvents = true;
+        }
+
+        private void Watcher_Created(object sender, FileSystemEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void InitDirectories()
