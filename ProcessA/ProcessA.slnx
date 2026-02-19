@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="../FFFP_POC_Core/FFFP_POC_Core.csproj" />
+  <Project Path="../ProcessB/ProcessB.csproj" />
+  <Project Path="ProcessA.csproj" />
+</Solution>
