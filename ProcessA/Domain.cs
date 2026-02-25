@@ -86,9 +86,9 @@
 
         public void ExportProducts(string filename)
         {
-            Console.WriteLine("Waiting 5 seconds, then sending the data");
-            // Dummy 5 second delay to "fake" a whole bunch of data
-            Thread.Sleep(5000);
+            //Console.WriteLine("Waiting 5 seconds, then sending the data");
+            //// Dummy 5 second delay to "fake" a whole bunch of data
+            //Thread.Sleep(5000);
 
             try
             {
@@ -125,7 +125,7 @@
             watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.FileName;
 
             // Only monitor for txt files
-            watcher.Filter = "*.txt";
+            watcher.Filter = "*.json";
 
             //watcher.Created += Watcher_FileCreatedInDir;
             watcher.Created += Watcher_FileCreatedInDir;

@@ -49,7 +49,7 @@
                 // Convert list of products to json
                 string jsonStr = JsonSerializer.Serialize(req);
 
-                string assembledFileName = $"Request-{Guid.NewGuid().ToString()}.txt";
+                string assembledFileName = $"Request-{Guid.NewGuid().ToString()}.json";
 
                 string fullFilePath = Path.Combine(RequestDirectory, assembledFileName);
 
@@ -101,8 +101,6 @@
                             Thread.Sleep(20);
                         }
                     }
-
-
 
                     // The file is found and we can therefore release the semaphore
                     semaphore.Release();
