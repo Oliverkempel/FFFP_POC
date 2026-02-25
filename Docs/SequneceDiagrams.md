@@ -37,8 +37,3 @@
     FS-->>B: Event Invoked:<br>New file in PIM/Export
     B->>FS: Reads response file from<br>PIM/Export
 ```
-
-# Clanker test
-```mermaid
-
-```
